@@ -45,7 +45,7 @@ jobs:
               exit 1
             else
               echo "Commit realizado por RubenDarioC, saltando validaciones adicionales."
-              env.JAVA_VERSION=true
+              echo "::set-env name=JAVA_VERSION::true"
               exit 0
             fi
           fi
