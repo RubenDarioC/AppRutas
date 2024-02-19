@@ -1,78 +1,74 @@
+name: CI
 
-  name: CI
-  
-  on:
-    push:
-      branches:
-        - 'Development'
-        - 'feature/*'
-        - 'fixbug/*'
-    pull_request:
-      branches:
-        - 'Development'
-        - 'feature/*'
-        - 'fixbug/*'
-  
-  jobs:
-    build:
-      runs-on: ubuntu-latest
-  
-      steps:
-        - uses: actions/checkout@v4.1.1
+on:
+  push:
+    branches:
+      - "Development"
+      - "feature/*"
+      - "fixbug/*"
+  pull_request:
+    branches:
+      - "Development"
+      - "feature/*"
+      - "fixbug/*"
 
-        - name: MAUIAppVersion
-          uses: managedcode/MAUIAppVersion@v1
-          with:
-            csproj: 'RutaSeguimientoApp.csproj'
-            version: ${{ github.run_number }} # to keep value unique
-            displayVersion: '1.0.0'
-            printFile: true # optional
-        
-        - name: Desplegar si las pruebas pasan
-          run: echo "Desplegando..."
-          if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-        
-        
-        # Agregamos una verificación para ignorar los commits hechos por usuarios que no sean RubenDarioC
-        - name: Verificar autor del commit
-          run: |
-              if [[ ${{ github.event_name }} == 'push' && ${{ github.ref }} == 'refs/heads/Development' ]]; then
-                author=$(git log -1 --pretty=format:'%an')
-                if [[ $author != 'RubenDarioC' ]]; then
-                  echo "Error: Los commits a la rama 'Development' solo pueden ser hechos por RubenDarioC."
-                  exit 1
-                else
-                  echo "Commit realizado por RubenDarioC, saltando validaciones adicionales."
-                  export VALIDACIONES_ADICIONALES_COMMIT=true
-                  exit 0
-                fi
-              fi
-      
-        - name: Validar rama de pull request
-          run: |
-              if [[ $VALIDACIONES_ADICIONALES_COMMIT ]]; then 
-                  echo "Se ignora pull request"
-                  exit 0
-              fi
-              if [[ ${{ github.event_name }} == 'pull_request' && "${{ github.base_ref }}" == 'refs/heads/Development' ]]; then
-                if [[ ${{ github.head_ref }} != 'feature/'* && ${{ github.head_ref }} != 'fixbug/'* ]]; then
-                  echo "Error: No se permiten pull requests desde la rama 'development' a menos que provengan de 'feature/*' o 'fixbug/*'"
-                  exit 1
-                fi
-              fi
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
+    steps:
+      - uses: actions/checkout@v4.1.1
 
-        - name: Merge después de un pull request exitoso
-          run: |
-            if [[ $VALIDACIONES_ADICIONALES_COMMIT ]]; then
-                echo "Se ignora merge"
-                exit 0
+      - name: MAUIAppVersion
+        uses: managedcode/MAUIAppVersion@v1
+        with:
+          csproj: "RutaSeguimientoApp.csproj"
+          version: ${{ github.run_number }} # to keep value unique
+          displayVersion: "1.0.0"
+          printFile: true # optional
+
+      - name: Desplegar si las pruebas pasan
+        run: echo "Desplegando..."
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+
+      # Agregamos una verificación para ignorar los commits hechos por usuarios que no sean RubenDarioC
+      - name: Verificar autor del commit
+        run: |
+          if [[ ${{ github.event_name }} == 'push' && ${{ github.ref }} == 'refs/heads/Development' ]]; then
+            author=$(git log -1 --pretty=format:'%an')
+            if [[ $author != 'RubenDarioC' ]]; then
+              echo "Error: Los commits a la rama 'Development' solo pueden ser hechos por RubenDarioC."
+              exit 1
+            else
+              echo "Commit realizado por RubenDarioC, saltando validaciones adicionales."
+              export VALIDACIONES_ADICIONALES_COMMIT=true
+              exit 0
             fi
-            if [[ ${{ github.event_name }} == 'pull_request' && ${{ github.event.action }} == 'closed' && ${{ github.event.pull_request.merged }} == true ]]; then
-              echo "El pull request fue exitoso, realizando el merge..."
-              # Aquí puedes realizar el merge en la rama de destino deseada, por ejemplo:
-              # git checkout master
-              # git merge ${{ github.head_ref }}
-              # git push
-            fi
+          fi
 
+      - name: Validar rama de pull request
+        run: |
+          if [[ $VALIDACIONES_ADICIONALES_COMMIT ]]; then 
+              echo "Se ignora pull request"
+              exit 0
+          fi
+          if [[ ${{ github.event_name }} == 'pull_request' && "${{ github.base_ref }}" == 'refs/heads/Development' ]]; then
+            if [[ ${{ github.head_ref }} != 'feature/'* && ${{ github.head_ref }} != 'fixbug/'* ]]; then
+              echo "Error: No se permiten pull requests desde la rama 'development' a menos que provengan de 'feature/*' o 'fixbug/*'"
+              exit 1
+            fi
+          fi
+
+      - name: Merge después de un pull request exitoso
+        run: |
+          if [[ $VALIDACIONES_ADICIONALES_COMMIT ]]; then
+              echo "Se ignora merge"
+              exit 0
+          fi
+          if [[ ${{ github.event_name }} == 'pull_request' && ${{ github.event.action }} == 'closed' && ${{ github.event.pull_request.merged }} == true ]]; then
+            echo "El pull request fue exitoso, realizando el merge..."
+            # Aquí puedes realizar el merge en la rama de destino deseada, por ejemplo:
+            # git checkout master
+            # git merge ${{ github.head_ref }}
+            # git push
+          fi
