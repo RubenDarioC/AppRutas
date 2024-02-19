@@ -28,4 +28,14 @@ jobs:
       # Ejemplo: Desplegar si las pruebas pasan
       - name: Desplegar si las pruebas pasan
         run: echo "Desplegando..."
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+
+      # Validación adicional para pull requests
+      - name: Validar rama de pull request
+        run: |
+          if [[ ${{ github.event_name }} == 'pull_request' && ${{ github.base_ref }} == 'Development' ]]; then
+            if [[ ${{ github.head_ref }} != 'feature/'* && ${{ github.head_ref }} != 'fixbug/'* ]]; then
+              echo "No se permiten pull requests desde la rama 'development' a menos que provengan de 'feature/*' o 'fixbug/*'"
+              exit 1
+            fi
+          fi
