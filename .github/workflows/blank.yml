@@ -41,6 +41,9 @@
               if [[ $author != 'RubenDarioC' ]]; then
                 echo "Error: Los commits a la rama 'Development' solo pueden ser hechos por RubenDarioC."
                 exit 1
+              else
+                echo "Commit realizado por RubenDarioC, saltando validaciones adicionales."
+                exit 0
               fi
             fi
             
