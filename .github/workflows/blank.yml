@@ -49,12 +49,13 @@
             
         - name: Validar rama de pull request
           run: |
-            if [[ ${{ github.event_name }} == 'pull_request' && ${{ github.base_ref }} == 'Development' ]]; then
-            if [[ ${{ github.head_ref }} != 'feature/'* && ${{ github.head_ref }} != 'fixbug/'* ]]; then
-              echo "Error: No se permiten pull requests desde la rama 'development' a menos que provengan de 'feature/*' o 'fixbug/*'"
+            if [[ ${{ github.event_name }} == 'pull_request' && "${{ github.base_ref }}" == 'refs/heads/Development' ]]; then
+              if [[ ${{ github.head_ref }} != 'feature/'* && ${{ github.head_ref }} != 'fixbug/'* ]]; then
+                echo "Error: No se permiten pull requests desde la rama 'development' a menos que provengan de 'feature/*' o 'fixbug/*'"
               exit 1
               fi
             fi
+
 
         - name: Merge después de un pull request exitoso
           run: |
