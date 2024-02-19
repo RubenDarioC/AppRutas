@@ -1,31 +1,54 @@
-name: CI
 
-on:
-  push:
-    branches:
-      - 'Development'
-      - 'feature/*'
-      - 'fixbug/*'
-  pull_request:
-    branches:
-      - 'Development'
-      - 'feature/*'
-      - 'fixbug/*'
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-
-      # Agrega tus otros pasos de construcción aquí
-
-      # Ejemplo: Ejecutar pruebas
-      - name: Ejecutar pruebas
-        run: echo "Ejecutando pruebas..."
-
-      # Ejemplo: Desplegar si las pruebas pasan
-      - name: Desplegar si las pruebas pasan
-        run: echo "Desplegando..."
-        if: github.ref == 'refs/heads/master'
+  name: CI
+  
+  on:
+    push:
+      branches:
+        - 'Development'
+        - 'feature/*'
+        - 'fixbug/*'
+    pull_request:
+      branches:
+        - 'Development'
+        - 'feature/*'
+        - 'fixbug/*'
+  
+  jobs:
+    build:
+      runs-on: ubuntu-latest
+  
+      steps:
+        - uses: actions/checkout@v3
+  
+        - name: Setup .NET
+          uses: actions/setup-dotnet@v1
+          with:
+            dotnet-version: '6.0.x'  # Ajusta la versión según tus necesidades
+  
+        - name: Restore dependencies
+          run: dotnet restore
+  
+        - name: Build
+          run: dotnet build --configuration Release
+  
+        - name: Run unit tests
+          run: dotnet test --configuration Release --no-build
+  
+        - name: Code style check
+          run: dotnet tool install -g dotnet-format && dotnet format --check
+  
+        - name: Ejecutar pruebas
+          run: echo "Ejecutando pruebas..."
+  
+        - name: Desplegar si las pruebas pasan
+          run: echo "Desplegando..."
+          if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+  
+        - name: Validar rama de pull request
+          run: |
+            if [[ ${{ github.event_name }} == 'pull_request' && ${{ github.base_ref }} == 'Development' ]]; then
+              if [[ ${{ github.head_ref }} != 'feature/'* && ${{ github.head_ref }} != 'fixbug/'* ]]; then
+                echo "No se permiten pull requests desde la rama 'development' a menos que provengan de 'feature/*' o 'fixbug/*'"
+                exit 1
+              fi
+            fi
