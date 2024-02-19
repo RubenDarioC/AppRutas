@@ -45,8 +45,8 @@ jobs:
               exit 1
             else
               echo "Commit realizado por RubenDarioC, saltando validaciones adicionales."
-              echo " $JAVA_VERSION "
-              JAVA_VERSION = true
+              echo "$JAVA_VERSION"
+              JAVA_VERSION=true
               exit 0
             fi
           fi
