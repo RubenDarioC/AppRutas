@@ -50,7 +50,7 @@
       
         - name: Validar rama de pull request
           run: |
-              if[[$VALIDACIONES_ADICIONALES_COMMIT]]; then 
+              if [[$VALIDACIONES_ADICIONALES_COMMIT]]; then 
                   echo "Se ignora pull request"
                   exit 0
               fi
