@@ -37,6 +37,9 @@
 
         - name: Install .NET MAUI workload for Android
           run: dotnet workload install maui-android
+        
+        - name: Install .NET MAUI workload for ios
+          run: dotnet workload install maui-ios
   
         - name: Restore dependencies
           run: dotnet restore
