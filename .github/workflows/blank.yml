@@ -53,12 +53,11 @@ jobs:
             exit 0
           fi
           if [[ ${{ github.event_name }} == 'pull_request' && "${{ github.base_ref }}" == 'refs/heads/Development' ]]; then
-            if [[ ${{ github.head_ref }} != 'feature/'* && ${{ github.head_ref }} != 'fixbug/'* ]]; then
-            echo "Error: No se permiten pull requests desde la rama 'development' a menos que provengan de 'feature/*' o 'fixbug/*'"
-            exit 1
+            if [[ "${{ github.head_ref }}" != 'feature/'* && "${{ github.head_ref }}" != 'fixbug/'* ]]; then
+              echo "Error: No se permiten pull requests desde la rama 'development' a menos que provengan de 'feature/*' o 'fixbug/*'"
+              exit 1
             fi
           fi
-
 
       - name: Merge después de un pull request exitoso
         run: |
@@ -71,5 +70,5 @@ jobs:
             # Aquí puedes realizar el merge en la rama de destino deseada, por ejemplo:
             # git checkout master
             # git merge ${{ github.head_ref }}
-            # git push
+            # git push  
           fi
