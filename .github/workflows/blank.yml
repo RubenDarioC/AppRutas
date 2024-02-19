@@ -26,7 +26,7 @@
             dotnet-version: '8.0'  # Ajusta la versión según tus necesidades
 
         - name: Install .NET MAUI
-          run: dotnet workload install maui 
+          run: dotnet workload install maui-android
 
         - name: Restore dependencies
           run: dotnet restore
