@@ -45,14 +45,15 @@ jobs:
               exit 1
             else
               echo "Commit realizado por RubenDarioC, saltando validaciones adicionales."
-              echo "::set-env name=JAVA_VERSION::true"
+              echo " $JAVA_VERSION "
+              JAVA_VERSION = true
               exit 0
             fi
           fi
         
       - name: Validar rama de pull request
         run: |
-          echo "El valor de VALIDACIONES_ADICIONALES_COMMIT es: $VALIDACIONES_ADICIONALES_COMMIT"
+          echo "El valor de VALIDACIONES_ADICIONALES_COMMIT es: "
           if: ${{ env.JAVA_VERSION }}
             echo "Se ignora pull request"
             exit 0
