@@ -24,6 +24,16 @@
           uses: actions/setup-dotnet@v1
           with:
             dotnet-version: '6.0.x'  # Ajusta la versión según tus necesidades
+
+        - name: Install Android SDK
+          run: |
+            wget https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip -O android-sdk.zip
+            unzip -q android-sdk.zip -d $HOME/android-sdk
+            echo "export ANDROID_HOME=$HOME/android-sdk" >> $HOME/.bashrc
+            echo "export PATH=$PATH:$HOME/android-sdk/tools/bin:$HOME/android-sdk/platform-tools" >> $HOME/.bashrc
+
+        - name: Accept Android SDK licenses
+          run: yes | sdkmanager --licenses
   
         - name: Restore dependencies
           run: dotnet restore
