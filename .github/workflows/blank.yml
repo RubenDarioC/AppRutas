@@ -48,6 +48,7 @@ jobs:
 
       - name: Validar rama de pull request
         run: |
+          echo "El valor de VALIDACIONES_ADICIONALES_COMMIT es: $VALIDACIONES_ADICIONALES_COMMIT"
           if [[ $VALIDACIONES_ADICIONALES_COMMIT == true ]]; then 
             echo "Se ignora pull request"
             exit 0
