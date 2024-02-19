@@ -50,12 +50,12 @@
       
         - name: Validar rama de pull request
           run: |
-              if [[$VALIDACIONES_ADICIONALES_COMMIT]]; then 
+              if [[ $VALIDACIONES_ADICIONALES_COMMIT ]]; then 
                   echo "Se ignora pull request"
                   exit 0
               fi
               if [[ ${{ github.event_name }} == 'pull_request' && "${{ github.base_ref }}" == 'refs/heads/Development' ]]; then
-                if [[ ${{ github.head_ref }} != 'feature/'* && ${{ github.head_ref }} != 'fixbug/'*]]; then
+                if [[ ${{ github.head_ref }} != 'feature/'* && ${{ github.head_ref }} != 'fixbug/'* ]]; then
                   echo "Error: No se permiten pull requests desde la rama 'development' a menos que provengan de 'feature/*' o 'fixbug/*'"
                   exit 1
                 fi
@@ -64,7 +64,7 @@
 
         - name: Merge después de un pull request exitoso
           run: |
-            if [[$VALIDACIONES_ADICIONALES_COMMIT ]]; then
+            if [[ $VALIDACIONES_ADICIONALES_COMMIT ]]; then
                 echo "Se ignora merge"
                 exit 0
             fi
