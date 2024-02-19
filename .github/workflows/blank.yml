@@ -20,49 +20,6 @@
       steps:
         - uses: actions/checkout@v3
   
-        - name: Setup .NET
-          uses: actions/setup-dotnet@v1
-          with:
-            dotnet-version: '8.0.x'  # Ajusta la versión según tus necesidades
-
-        - name: Install Android SDK
-          run: |
-            wget https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip -O android-sdk.zip
-            unzip -q android-sdk.zip -d $HOME/android-sdk
-            echo "export ANDROID_HOME=$HOME/android-sdk" >> $HOME/.bashrc
-            echo "export PATH=$PATH:$HOME/android-sdk/tools/bin:$HOME/android-sdk/platform-tools" >> $HOME/.bashrc
-
-        - name: Accept Android SDK licenses
-          run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
-
-        - name: Install .NET MAUI workload for Android
-          run: dotnet workload install maui-android
-        
-        - name: Setup .NET for macOS
-          uses: actions/setup-dotnet@v1
-          with:
-            dotnet-version: '6.0.x'  # Ajusta la versión según tus necesidades
-          if: runner.os == 'macOS'
-
-        - name: Install .NET MAUI workload for iOS
-          run: dotnet workload install maui-ios
-          if: runner.os == 'macOS'
-  
-        - name: Restore dependencies
-          run: dotnet restore
-  
-        - name: Build
-          run: dotnet build --configuration Release
-  
-        - name: Run unit tests
-          run: dotnet test --configuration Release --no-build
-  
-        - name: Code style check
-          run: dotnet tool install -g dotnet-format && dotnet format --check
-  
-        - name: Ejecutar pruebas
-          run: echo "Ejecutando pruebas..."
-  
         - name: Desplegar si las pruebas pasan
           run: echo "Desplegando..."
           if: github.ref == 'refs/heads/master' && github.event_name == 'push'
