@@ -18,7 +18,18 @@
       runs-on: ubuntu-latest
   
       steps:
-        - uses: actions/checkout@v3
+        - uses: actions/checkout@v4.1.1
+
+        - name: Setup .NET
+          uses: actions/setup-dotnet@v1
+          with:
+            dotnet-version: '8.0'  # Ajusta la versión según tus necesidades
+
+        - name: Restore dependencies
+          run: dotnet restore
+
+        - name: Build
+          run: dotnet build --no-restore
   
         - name: Desplegar si las pruebas pasan
           run: echo "Desplegando..."
