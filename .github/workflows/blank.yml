@@ -12,11 +12,10 @@ on:
       - "feature/*"
       - "fixbug/*"
 
-
 jobs:
   build:
     env:
-        JAVA_VERSION: false
+      JAVA_VERSION: false
 
     runs-on: ubuntu-latest
 
@@ -46,11 +45,12 @@ jobs:
             else
               echo "Commit realizado por RubenDarioC, saltando validaciones adicionales."
               echo "$JAVA_VERSION"
-              JAVA_VERSION=true
+              env.JAVA_VERSION=true
+              echo "$JAVA_VERSION"
               exit 0
             fi
           fi
-        
+
       - name: Validar rama de pull request
         run: |
           echo "El valor de JAVA_VERSION es: $JAVA_VERSION "
