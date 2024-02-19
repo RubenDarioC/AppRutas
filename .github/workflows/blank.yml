@@ -48,7 +48,7 @@ jobs:
 
       - name: Validar rama de pull request
         run: |
-          if [[ $VALIDACIONES_ADICIONALES_COMMIT ]]; then 
+          if [[ $VALIDACIONES_ADICIONALES_COMMIT == true ]]; then 
               echo "Se ignora pull request"
               exit 0
           fi
@@ -61,7 +61,7 @@ jobs:
 
       - name: Merge después de un pull request exitoso
         run: |
-          if [[ $VALIDACIONES_ADICIONALES_COMMIT ]]; then
+          if [[ $VALIDACIONES_ADICIONALES_COMMIT == true ]]; then
               echo "Se ignora merge"
               exit 0
           fi
