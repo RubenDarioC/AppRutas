@@ -25,11 +25,14 @@
           with:
             dotnet-version: '8.0'  # Ajusta la versión según tus necesidades
 
+        - name: Install .NET MAUI
+          run: dotnet workload install maui 
+
         - name: Restore dependencies
           run: dotnet restore
 
         - name: Build
-          run: dotnet build --no-restore
+          run: dotnet build RutaSeguimientoApp.csproj -c release -f net8.0-android --no-restore
   
         - name: Desplegar si las pruebas pasan
           run: echo "Desplegando..."
