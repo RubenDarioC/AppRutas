@@ -53,7 +53,7 @@ jobs:
 
       - name: Validar rama de pull request
         run: |
-          echo "El valor de JAVA_VERSION es: $JAVA_VERSION  --- $env.JAVA_VERSION"
+          echo "El valor de JAVA_VERSION es: $JAVA_VERSION  ---"
           if: ${{ env.JAVA_VERSION }}
             echo "Se ignora pull request"
             exit 0
