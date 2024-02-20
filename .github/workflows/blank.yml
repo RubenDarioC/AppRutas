@@ -45,7 +45,8 @@ jobs:
               echo "$JAVA_VERSION"
               echo "JAVA_VERSION=true" >> "$GITHUB_ENV"
 
-              echo " env.JAVA_VERSION"
+              echo " se actualizovaribale"
+              echo "$JAVA_VERSION"
               exit 0
             fi
           fi
