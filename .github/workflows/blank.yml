@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - "Development"
-      - "feature/*"
-      - "fixbug/*"
   pull_request:
     branches:
       - "Development"
@@ -45,8 +43,9 @@ jobs:
             else
               echo "Commit realizado por RubenDarioC, saltando validaciones adicionales."
               echo "$JAVA_VERSION"
-              env.JAVA_VERSION=true
-              echo "$JAVA_VERSION"
+              echo "JAVA_VERSION=true" >> "$GITHUB_ENV"
+
+              echo "$env.JAVA_VERSION"
               exit 0
             fi
           fi
