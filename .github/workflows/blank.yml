@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - "Development"
-      - "feature/*"
-      - "fixbug/*"
   pull_request:
     branches:
       - "Development"
@@ -14,6 +12,9 @@ on:
 
 jobs:
   build:
+    env:
+      JAVA_VERSION: false
+
     runs-on: ubuntu-latest
 
     steps:
@@ -41,14 +42,19 @@ jobs:
               exit 1
             else
               echo "Commit realizado por RubenDarioC, saltando validaciones adicionales."
-              export VALIDACIONES_ADICIONALES_COMMIT=true
+              echo "$JAVA_VERSION"
+              echo "JAVA_VERSION=true" >> "$GITHUB_ENV"
+
+              echo " se actualizovaribale"
+              echo "$JAVA_VERSION"
               exit 0
             fi
           fi
 
       - name: Validar rama de pull request
         run: |
-          if [[ $VALIDACIONES_ADICIONALES_COMMIT == true ]]; then 
+          echo "El valor de JAVA_VERSION es: $JAVA_VERSION  ---"
+          if: ${{ env.JAVA_VERSION }}
             echo "Se ignora pull request"
             exit 0
           fi
@@ -61,7 +67,7 @@ jobs:
 
       - name: Merge después de un pull request exitoso
         run: |
-          if [[ $VALIDACIONES_ADICIONALES_COMMIT ]]; then
+          if: ${{ env.JAVA_VERSION }}
               echo "Se ignora merge"
               exit 0
           fi

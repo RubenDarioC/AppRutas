@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views ="clr-namespace:RutaSeguimientoApp.MVVM.Views"
+             xmlns:local ="clr-namespace:RutaSeguimientoApp"
+             xmlns:md="clr-namespace:RutaSeguimientoApp.Common.Utilities"
+             x:Class="RutaSeguimientoApp.MVVM.Views.AppShell"
+             FlyoutBackgroundColor = "White">
+
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <Grid ColumnDefinitions=".2*, .8*" HeightRequest="65" RowSpacing="0">
+                <Frame HeightRequest="35"
+                   WidthRequest="35"
+                   CornerRadius="5"
+                   HorizontalOptions="Center"
+                   IsClippedToBounds="True"
+                   Padding="0"
+                   BorderColor="#B2DFFC"
+                   Margin="0,0,0,0">
+                    <Image HeightRequest="35" WidthRequest="35" Margin="0,0,0,0" Source="{Binding FlyoutIcon }" BackgroundColor="#B2DFFC" VerticalOptions="Center"/>
+                </Frame>
+                <Label 
+                    Grid.Column="1" 
+                    Margin="5,0,0,0" 
+                    FontSize="17" 
+                    FontFamily=""
+                    Text="{Binding Title}"
+                    VerticalOptions="Center"
+                    TextColor="Black"/>
+            </Grid>
+        </DataTemplate>
+    </Shell.ItemTemplate>
+
+    <Shell.FlyoutHeader>
+
+        <Grid BackgroundColor="White" RowDefinitions="100" 
+              ColumnDefinitions=".7*, .3*">
+            <Label Margin="10,0,0,0" FontAttributes="Bold" FontSize="Title" VerticalOptions="Center" TextColor="Black">Nombre del Usuario</Label>
+            <Image Grid.Column="1" Grid.Row="0" WidthRequest="48">
+                <Image.Source>
+                    <FontImageSource FontFamily="MaterialOutlined" Color="Black" Glyph="{x:Static md:MaterialDesingIcons.AccountCircle}" />
+                </Image.Source>
+            </Image>
+            <Rectangle Grid.ColumnSpan="2" Fill="Gray" Opacity=".1"></Rectangle>
+        </Grid>
+
+    </Shell.FlyoutHeader>
+
+    <!--#region -->
+    <ShellContent Title="MainPage" Route="MainPageView" ContentTemplate="{DataTemplate local:MainPageView}">
+        <ShellContent.Icon>
+            <FontImageSource FontFamily="MaterialOutlined" Color="White" Glyph="{x:Static md:MaterialDesingIcons.Home}" />
+        </ShellContent.Icon>
+    </ShellContent>
+
+    <ShellContent Title="Ruta Diaria" Route="MapForRouteUserView" ContentTemplate="{DataTemplate views:MapForRouteUserView}">
+        <ShellContent.FlyoutIcon>
+            <FontImageSource FontFamily="MaterialOutlined" Color="White" Glyph="{x:Static md:MaterialDesingIcons.Map}" />
+        </ShellContent.FlyoutIcon>
+    </ShellContent>
+
+    <ShellContent Title="Ruta Diaria" ContentTemplate="{DataTemplate views:MapForRouteUserView}">
+        <ShellContent.FlyoutIcon>
+            <FontImageSource FontFamily="MaterialOutlined" Color="White" Glyph="{x:Static md:MaterialDesingIcons.MapsHomeWork}" />
+        </ShellContent.FlyoutIcon>
+    </ShellContent>
+    <!--#endregion-->
+
+    <Shell.FlyoutFooter>
+        <Button BackgroundColor="Transparent" Margin="0,30,0,0" HorizontalOptions="Start" Text="Sing Out" TextColor="Black">
+            <Button.ImageSource>
+                <FontImageSource FontFamily="MaterialOutlined" Color="Black" Glyph="{x:Static md:MaterialDesingIcons.Logout}" />
+            </Button.ImageSource>
+        </Button>
+    </Shell.FlyoutFooter>
+</Shell>

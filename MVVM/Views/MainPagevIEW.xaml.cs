@@ -1,10 +1,10 @@
 ﻿namespace RutaSeguimientoApp
 {
-	public partial class MainPage : ContentPage
+	public partial class MainPageView : ContentPage
 	{
 		int count = 0;
 
-		public MainPage()
+		public MainPageView()
 		{
 			InitializeComponent();
 		}
