@@ -4,8 +4,14 @@
              xmlns:views ="clr-namespace:RutaSeguimientoApp.MVVM.Views"
              xmlns:local ="clr-namespace:RutaSeguimientoApp"
              xmlns:md="clr-namespace:RutaSeguimientoApp.Common.Utilities"
-             x:Class="RutaSeguimientoApp.MVVM.Views.AppShell"
-             FlyoutBackgroundColor = "White">
+             x:Class="RutaSeguimientoApp.MVVM.Views.AppShell">
+    
+    <Shell.FlyoutIcon>
+        <FontImageSource 
+            FontFamily="MaterialOutlined" 
+            Glyph="{x:Static md:MaterialDesingIcons.Home}" 
+            Color="Black" />
+    </Shell.FlyoutIcon>
 
     <Shell.ItemTemplate>
         <DataTemplate>
@@ -32,8 +38,8 @@
         </DataTemplate>
     </Shell.ItemTemplate>
 
+    
     <Shell.FlyoutHeader>
-
         <Grid BackgroundColor="White" RowDefinitions="100" 
               ColumnDefinitions=".7*, .3*">
             <Label Margin="10,0,0,0" FontAttributes="Bold" FontSize="Title" VerticalOptions="Center" TextColor="Black">Nombre del Usuario</Label>
@@ -47,6 +53,10 @@
 
     </Shell.FlyoutHeader>
 
+    <FlyoutItem>
+        
+    </FlyoutItem>
+    
     <!--#region -->
     <ShellContent Title="MainPage" Route="MainPageView" ContentTemplate="{DataTemplate local:MainPageView}">
         <ShellContent.Icon>
