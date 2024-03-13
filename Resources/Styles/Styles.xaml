@@ -2,9 +2,76 @@
 <?xaml-comp compile="true" ?>
 <ResourceDictionary 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:md="clr-namespace:RutaSeguimientoApp.Common.Utilities">
 
-    <Style TargetType="ActivityIndicator">
+    <Style TargetType="Shell" ApplyToDerivedTypes="True">
+        <Setter Property="FlyoutBackground">
+            <LinearGradientBrush EndPoint="0,1">
+                <GradientStop
+                    Color="{StaticResource PrimaryBackGround}"
+                    Offset="0.1"/>
+                <GradientStop
+                    Color="{StaticResource PrimaryBackGround}"
+                    Offset="0.7"/>
+                <GradientStop
+                    Color="{StaticResource SecondaryBackGroundIcon}"
+                    Offset="1.0"/>
+            </LinearGradientBrush>
+        </Setter>
+        <Setter Property="Shell.ForegroundColor" Value="{OnPlatform WinUI={StaticResource Prueba}, Default={StaticResource TertiaryBackGround}}"/>
+        <Setter Property="Shell.TitleColor" Value="{AppThemeBinding Light={StaticResource TertiaryText}, Dark={StaticResource TertiaryText}}" />
+        <Setter Property="Padding" Value="0"></Setter>
+        <Setter Property="Shell.TitleView">
+            <Grid CascadeInputTransparent="False" ZIndex="1">
+                <SearchBar HorizontalOptions="CenterAndExpand">
+
+                </SearchBar>
+            </Grid>
+        </Setter>
+        <Setter Property="Shell.NavBarHasShadow" Value="False" />
+        <Setter Property="Shell.DisabledColor" Value="{AppThemeBinding Light={StaticResource Prueba}, Dark={StaticResource Prueba}}" />
+    </Style>
+
+    <!-- Configuracion del contenido de la paginas principales-->
+    <Style TargetType="Page" ApplyToDerivedTypes="True">
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource PrimaryBackGround}, Dark={StaticResource PrimaryBackGround}}" />
+    </Style>
+
+    <Style TargetType="Label">
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource PrimaryText}, Dark={StaticResource PrimaryText}}" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="FontSize" Value="Body"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray}, Dark={StaticResource Gray}}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <!--<Style TargetType="NavigationPage">
+        <Setter Property="BarBackgroundColor" Value="{AppThemeBinding Light={StaticResource Prueba}, Dark={StaticResource Prueba}}" />
+        <Setter Property="BarTextColor" Value="{AppThemeBinding Light={StaticResource Prueba}, Dark={StaticResource Prueba}}" />
+        -->
+    <!--<Setter Property="IconColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource White}}" />-->
+    <!--
+    </Style>-->
+
+
+    <!--<Style TargetType="ContentPage">
+        <Setter Property="BackgroundColor" Value="{StaticResource PrimaryBackGround}"></Setter>
+    </Style>-->
+
+    <!--<Style TargetType="ActivityIndicator">
         <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}" />
     </Style>
 
@@ -392,35 +459,15 @@
         </Setter>
     </Style>
 
-    <Style TargetType="Page" ApplyToDerivedTypes="True">
-        <Setter Property="Padding" Value="0"/>
-        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}" />
-    </Style>
+  
 
-    <Style TargetType="Shell" ApplyToDerivedTypes="True">
-        <Setter Property="Shell.BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}" />
-        <Setter Property="Shell.ForegroundColor" Value="{OnPlatform WinUI={StaticResource Primary}, Default={StaticResource White}}" />
-        <Setter Property="Shell.TitleColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource SecondaryDarkText}}" />
-        <Setter Property="Shell.DisabledColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray950}}" />
-        <Setter Property="Shell.UnselectedColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray200}}" />
-        <Setter Property="Shell.NavBarHasShadow" Value="False" />
-        <Setter Property="Shell.TabBarBackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}" />
-        <Setter Property="Shell.TabBarForegroundColor" Value="{AppThemeBinding Light={StaticResource Magenta}, Dark={StaticResource White}}" />
-        <Setter Property="Shell.TabBarTitleColor" Value="{AppThemeBinding Light={StaticResource Magenta}, Dark={StaticResource White}}" />
-        <Setter Property="Shell.TabBarUnselectedColor" Value="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray200}}" />
-    </Style>
 
-    <Style TargetType="NavigationPage">
-        <Setter Property="BarBackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}" />
-        <Setter Property="BarTextColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource White}}" />
-        <Setter Property="IconColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource White}}" />
-    </Style>
 
     <Style TargetType="TabbedPage">
         <Setter Property="BarBackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}" />
         <Setter Property="BarTextColor" Value="{AppThemeBinding Light={StaticResource Magenta}, Dark={StaticResource White}}" />
         <Setter Property="UnselectedTabColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray950}}" />
         <Setter Property="SelectedTabColor" Value="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}" />
-    </Style>
+    </Style>-->
 
 </ResourceDictionary>

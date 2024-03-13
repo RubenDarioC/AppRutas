@@ -73,6 +73,7 @@
 
 	<ItemGroup>
 	  <Folder Include="Common\Extensions\" />
+	  <Folder Include="MVVM\Templates\" />
 	  <Folder Include="Services\" />
 	</ItemGroup>
 
@@ -93,6 +94,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="MVVM\Views\MapForRouteUserView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Resources\Styles\StylesLogin.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

@@ -2,7 +2,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RutaSeguimientoApp.MVVM.Views.LoginView"
-             Title="NewPage1">
+             Style="{StaticResource LoginContentPage}">
+
     <VerticalStackLayout 
         Spacing="25" 
         Padding="30,0" 
@@ -11,29 +12,29 @@
         <Image Source="dotnet_bot.png" HeightRequest="150" WidthRequest="150" />
 
         <VerticalStackLayout Spacing="5">
-            <Label Text="Welcome!" FontSize="28" TextColor="Gray" HorizontalTextAlignment="Center" />
+            <Label Text="Welcome!"  Style="{StaticResource LoginText}" />
             <Label Text="Login to your account" FontSize="18" TextColor="Gray" HorizontalTextAlignment="Center" />
         </VerticalStackLayout>
 
         <StackLayout Orientation="Horizontal">
-            <Frame ZIndex="1" HasShadow="True" BorderColor="White" HeightRequest="56" WidthRequest="56" CornerRadius="28">
+            <Frame Style="{StaticResource FrameLoginIndex}">
                 <Image Source="user.png" HeightRequest="20" WidthRequest="20" />
             </Frame>
-            <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0" HasShadow="True" BorderColor="White"  HorizontalOptions="FillAndExpand">
-                <Entry Text="{Binding Login.Email}" TextColor="Black"  Margin="20,0,0,0" VerticalOptions="Center" Placeholder="User Name" Keyboard="Email" />
+            <Frame Style="{StaticResource FrameLogin}">
+                <Entry Style="{StaticResource LonginEntry}" Text="{Binding Login.Email}" Placeholder="User Name" Keyboard="Email" />
             </Frame>
         </StackLayout>
 
         <StackLayout Orientation="Horizontal">
-            <Frame ZIndex="1" HasShadow="True" BorderColor="White" HeightRequest="56" WidthRequest="56" CornerRadius="28">
+            <Frame Style="{StaticResource FrameLoginIndex}">
                 <Image Source="lock.png" HeightRequest="20" WidthRequest="20" />
             </Frame>
-            <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0" HasShadow="True" BorderColor="White"  HorizontalOptions="FillAndExpand">
-                <Entry Text="{Binding Login.Password}" TextColor="Black" Margin="20,0,0,0" VerticalOptions="Center" Placeholder="Password" IsPassword="True" />
+            <Frame Style="{StaticResource FrameLogin}">
+                <Entry Style="{StaticResource LonginEntry}" Text="{Binding Login.Password}" Placeholder="Password" IsPassword="True" />
             </Frame>
         </StackLayout>
 
-        <Button Text="Sign In" WidthRequest="100" CornerRadius="20" HorizontalOptions="Center" Command="{Binding LoginCommand}" />
+        <Button Style="{StaticResource ButtonLogin}" Text="Sign In"  Command="{Binding LoginCommand}" />
 
         <StackLayout Orientation="Horizontal" Spacing="5" HorizontalOptions="Center">
             <Label Text="Don't have account?" TextColor="Gray" />

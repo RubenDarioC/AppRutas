@@ -24,6 +24,7 @@ namespace RutaSeguimientoApp.MVVM.Views
 			}
 		}
 
+
 		private async Task<bool> CheckPermissions()
 		{
 
