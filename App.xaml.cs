@@ -4,14 +4,13 @@ namespace RutaSeguimientoApp
 {
 	public partial class App : Application
 	{
-		public App()
+		public static IServiceProvider ServiceProvider { get; private set; }
+		public App(IServiceProvider serviceProvider)
 		{
 			InitializeComponent();
+			ServiceProvider = serviceProvider;
+			MainPage = new AppShell();
 
-			Routing.RegisterRoute(nameof(MainPageView), typeof(MainPageView));
-			Routing.RegisterRoute(nameof(MapForRouteUserView), typeof(MapForRouteUserView));
-
-			MainPage = new LoginView();
 		}
 	}
 }

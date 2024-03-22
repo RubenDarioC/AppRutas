@@ -1,6 +1,5 @@
 ﻿namespace RutaSeguimientoApp.MVVM.ViewModels
 {
-
 	public class MapRouteUserViewModel
 	{
 		public Microsoft.Maui.Controls.Maps.Map Map { get; set; }

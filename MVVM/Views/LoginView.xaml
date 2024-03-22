@@ -2,7 +2,17 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RutaSeguimientoApp.MVVM.Views.LoginView"
+             xmlns:md="clr-namespace:RutaSeguimientoApp.Common.Utilities"
+             xmlns:vm="clr-namespace:RutaSeguimientoApp.MVVM.ViewModels"
+             x:DataType= "vm:LoginViewModel"
+             Shell.NavBarIsVisible="False"
+             Shell.FlyoutBehavior="Disabled"
              Style="{StaticResource LoginContentPage}">
+
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="False"  IsEnabled="False" />
+    </Shell.BackButtonBehavior>
+
 
     <VerticalStackLayout 
         Spacing="25" 
@@ -34,6 +44,19 @@
             </Frame>
         </StackLayout>
 
+        <StackLayout Orientation="Horizontal">
+            <Frame Style="{StaticResource FrameLoginIndex}">
+                <Image HeightRequest="20" WidthRequest="20">
+                    <Image.Source>
+                        <FontImageSource FontFamily="MaterialOutlined" Color="Black" Glyph="{x:Static md:MaterialDesingIcons.RememberMe}" />
+                    </Image.Source>
+                </Image>
+            </Frame>
+            <Frame Style="{StaticResource FrameLogin}">
+                <CheckBox IsChecked="{Binding Login.Remember}"/>
+            </Frame>
+        </StackLayout>
+    
         <Button Style="{StaticResource ButtonLogin}" Text="Sign In"  Command="{Binding LoginCommand}" />
 
         <StackLayout Orientation="Horizontal" Spacing="5" HorizontalOptions="Center">

@@ -1,33 +1,52 @@
-﻿using RutaSeguimientoApp.MVVM.Models;
-using RutaSeguimientoApp.MVVM.Views;
-using System.Windows.Input;
+﻿using RutaSeguimientoApp.Common.Exceptions;
+using RutaSeguimientoApp.Common.Extensions;
+using RutaSeguimientoApp.Models.ModelsPreference;
+using RutaSeguimientoApp.Models.ModelsRest;
+using RutaSeguimientoApp.MVVM.Models;
+using RutaSeguimientoApp.Services.Interfaces;
 
 namespace RutaSeguimientoApp.MVVM.ViewModels
 {
 	public class LoginViewModel
 	{
+		readonly ILoginRestService _loginRestService = ActivatorUtilities.GetServiceOrCreateInstance<ILoginRestService>(App.ServiceProvider);
 		public LoginModel Login { get; set; }
-
-		public ICommand LoginCommand => new Command(LoginUser);
+		public Command LoginCommand { get; }
 
 		public LoginViewModel()
 		{
 			Login = new LoginModel();
+			LoginCommand = new Command(LoginUser);
 		}
 
-		public void LoginUser()
+		public async void LoginUser()
 		{
-			if (Login.Email == "1" && Login.Password == "1")
+
+			UserResponse result = await _loginRestService.LoginUse(Login.Email, Login.Password);
+
+			if (result is { Error: null, Token: not null, UserId: not null, Name: not null })
 			{
-				App.Current!.MainPage = new AppShell();
+				try
+				{
+					PreferencesExtensionApp.InsertPreferencesByModel((UserPreference)result);
+					await Shell.Current.GoToAsync($"//{nameof(MainPageView)}");
+				}
+				catch (BussinnesException ex)
+				{
+					await Application.Current!.MainPage!.DisplayAlert(ex.Title, ex.ErrorDetails, "Aceptar");
+				}
+				catch (Exception ex)
+				{
+					await Application.Current!.MainPage!.DisplayAlert("Error", ex.Message, "Aceptar");
+				}
 			}
-			else if (string.IsNullOrEmpty(Login.Email)) 
+			else if (result.Error != null) 
 			{
-				App.Current!.MainPage = new AppShell();
+				await Application.Current!.MainPage!.DisplayAlert("Error", result.Error.ToString(), "Aceptar");
 			}
 			else
 			{
-				App.Current!.MainPage!.DisplayAlert("tittle", "message contraseña errronea", "Aceptar");
+				await Application.Current!.MainPage!.DisplayAlert("tittle", "contraseña o usuario erroneos", "Aceptar");
 			}
 		}
 	}
