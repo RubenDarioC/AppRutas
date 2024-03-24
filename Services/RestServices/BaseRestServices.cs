@@ -1,4 +1,6 @@
-﻿using RutaSeguimientoApp.Models.ModelsConfig;
+﻿using RutaSeguimientoApp.Common.Exceptions;
+using RutaSeguimientoApp.Models.ModelsConfig;
+using RutaSeguimientoApp.Models.ModelsEnum;
 using RutaSeguimientoApp.Models.ModelsRest;
 using System.Collections.Specialized;
 using System.Net;
@@ -53,46 +55,55 @@ namespace RutaSeguimientoApp.Services.RestServices
 
 		private async Task<T> SendRequestTask<T>(HttpMethod httpMethod, string endPoint, object? body = null, NameValueCollection? headers = null, MultipartFormDataContent? multipartFormData = null) where T : BaseResponseRest, new()
 		{
-			bool validate = Uri.TryCreate(endPoint, UriKind.Absolute, out Uri? uri);
-			if (!validate || uri is null)
-			{
-				return new() { Error = "Error Interno revise la solicitud enviada" };
-			}
-
-			InserGlobalParameters(uri, headers: headers, CookieCollection);
-			using var handler = new HttpClientHandler() { CookieContainer = _cookiesGloblas ?? new() };
-			using var httpClient = new HttpClient(handler);
-			httpClient.Timeout = TimeSpan.FromMilliseconds(15000);
-
-			HttpRequestMessage httpRequestMessage = new(httpMethod, uri);
-
-			if (_headersGloblas!= null && _headersGloblas.Any())
-			{
-				foreach (KeyValuePair<string, string> key in _headersGloblas)
-				{
-					httpRequestMessage.Headers.Add(key.Key, key.Value);
-				}
-			}
-
-			if (body != null)
-			{
-				httpRequestMessage.Content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, BaseRestConfigApp.ContentType);
-			}
-
-			if (multipartFormData != null)
-			{
-				httpRequestMessage.Content = multipartFormData;
-			}
-
 			try
 			{
-				HttpResponseMessage httpResponseMessage = httpClient.Send(httpRequestMessage);
-				T response = await ReadResponseTask<T>(httpResponseMessage);
-				return response;
+				bool validate = Uri.TryCreate(endPoint, UriKind.Absolute, out Uri? uri);
+				if (!validate || uri is null)
+				{
+					throw new BussinnesException(EnumExceptions.ErrorBuildRequest);
+				}
+
+				InserGlobalParameters(uri, headers: headers, CookieCollection);
+				using var handler = new HttpClientHandler() { CookieContainer = _cookiesGloblas ?? new() };
+				using var httpClient = new HttpClient(handler);
+				httpClient.Timeout = TimeSpan.FromMilliseconds(15000);
+
+				HttpRequestMessage httpRequestMessage = new(httpMethod, uri);
+
+				if (_headersGloblas != null && _headersGloblas.Any())
+				{
+					foreach (KeyValuePair<string, string> key in _headersGloblas)
+					{
+						httpRequestMessage.Headers.Add(key.Key, key.Value);
+					}
+				}
+
+				if (body != null)
+				{
+					httpRequestMessage.Content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, BaseRestConfigApp.ContentType);
+				}
+
+				if (multipartFormData != null)
+				{
+					httpRequestMessage.Content = multipartFormData;
+				}
+
+				try
+				{
+					HttpResponseMessage httpResponseMessage = httpClient.Send(httpRequestMessage);
+					T response = await ReadResponseTask<T>(httpResponseMessage);
+					return response;
+
+				}
+				catch (BussinnesException) { throw; }
+				catch (Exception ex)
+				{
+					throw new BussinnesException(EnumExceptions.ErrorSendRequest, ex);
+				}
 			}
 			catch (Exception ex)
 			{
-				return new() { Error = ex.Message };
+				throw new BussinnesException(EnumExceptions.ErrorBuildRequest, ex);
 			}
 		}
 
@@ -109,38 +120,66 @@ namespace RutaSeguimientoApp.Services.RestServices
 			switch (responseMessage.StatusCode)
 			{
 				case HttpStatusCode.OK:
-					return JsonSerializer.Deserialize<TType>(content, options) ?? new();
-				default:
-					return new() { Error = content };
+					TType result = JsonSerializer.Deserialize<TType>(content, options) ?? new();
+					result.Success = true;
+					result.CodeResponse = (int)HttpStatusCode.OK;
+					return result;
+
+				case HttpStatusCode.BadRequest:
+					return new() { CodeResponse = (int)HttpStatusCode.BadRequest, Error = content };
+
+				case HttpStatusCode.Unauthorized:
+					return new() { CodeResponse = (int)HttpStatusCode.Unauthorized, Error = content };
+
+				case HttpStatusCode.NoContent:
+					return new() { CodeResponse = (int)HttpStatusCode.NoContent, Error = content };	
+			
+
+				default: throw new BussinnesException(EnumExceptions.ErrorStatusReadResponse);
+
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="uri"></param>
+		/// <param name="headers"></param>
+		/// <param name="cookieCollection"></param>
+		/// <exception cref="BussinnesException"></exception>
 		private void InserGlobalParameters(Uri uri, NameValueCollection? headers = null, CookieCollection? cookieCollection = null)
 		{
-			_headersGloblas = [];
-			_cookiesGloblas = new();
-
-			if (headers != null)
+			try
 			{
-				foreach (string? header in headers.AllKeys)
+				_headersGloblas = [];
+				_cookiesGloblas = new();
+
+				if (headers != null)
 				{
-					if (header != null)
-						_headersGloblas.Add(header, headers.Get(header) ?? string.Empty);
+					foreach (string? header in headers.AllKeys)
+					{
+						if (header != null)
+							_headersGloblas.Add(header, headers.Get(header) ?? string.Empty);
+					}
+				}
+
+				if (BaseRestConfigApp.HeadersGloblas != null)
+				{
+					foreach (var header in BaseRestConfigApp.HeadersGloblas)
+					{
+						if (header.Key != null)
+							_headersGloblas.Add(header.Key, header.Value ?? string.Empty);
+					}
+				}
+
+				if (cookieCollection != null)
+				{
+					_cookiesGloblas.Add(uri, cookieCollection);
 				}
 			}
-
-			if (BaseRestConfigApp.HeadersGloblas != null)
+			catch (Exception ex)
 			{
-				foreach (var header in BaseRestConfigApp.HeadersGloblas)
-				{
-					if (header.Key != null)
-						_headersGloblas.Add(header.Key, header.Value ?? string.Empty);
-				}
-			}
-
-			if (cookieCollection != null)
-			{
-				_cookiesGloblas.Add(uri, cookieCollection);
+				throw new BussinnesException(EnumExceptions.ErrorBuildRequest, ex);
 			}
 		}
 
@@ -159,21 +198,28 @@ namespace RutaSeguimientoApp.Services.RestServices
 		/// </summary>
 		/// <param name="queryParameters"></param>
 		/// <returns></returns>
-		protected string BuildUrlApi(NameValueCollection? queryParameters = null)
+		protected string BuildUrlApi(NameValueCollection queryParameters)
 		{
-			UriBuilder uriBuilder = new(BaseRestConfigApp.UrlBase)
+			try
 			{
-				Path = BaseRestConfigApp.Servicios[EndPoint].Path,
-			};
+				UriBuilder uriBuilder = new(BaseRestConfigApp.UrlBase)
+				{
+					Path = BaseRestConfigApp.Servicios[EndPoint].Path,
+				};
 
-			if (queryParameters != null)
-			{
-				NameValueCollection query = HttpUtility.ParseQueryString(uriBuilder.Query);
-				query.Add(queryParameters);
-				uriBuilder.Query = query.ToString();
+				if (queryParameters != null)
+				{
+					NameValueCollection query = HttpUtility.ParseQueryString(uriBuilder.Query);
+					query.Add(queryParameters);
+					uriBuilder.Query = query.ToString();
+					return uriBuilder.ToString();
+				}
 				return uriBuilder.ToString();
 			}
-			return uriBuilder.ToString();
+			catch (Exception ex)
+			{
+				throw new BussinnesException(EnumExceptions.ErrorBuildUrl, ex);
+			}
 		}
 
 		/// <summary>
@@ -194,28 +240,35 @@ namespace RutaSeguimientoApp.Services.RestServices
 		/// <param name="pathSegments"></param>
 		/// <param name="pathParameters"></param>
 		/// <returns></returns>
-		protected string BuildUrlApi(string pathSegments, NameValueCollection? pathParameters = null)
+		protected string BuildUrlApi(string pathSegments, NameValueCollection pathParameters = null)
 		{
-			UriBuilder uriBuilder = new(BaseRestConfigApp.UrlBase)
+			try
 			{
-				Path = BaseRestConfigApp.Servicios[EndPoint].Path + pathSegments,
-			};
-
-			if (pathParameters != null)
-			{
-				foreach (var parameter in pathParameters.AllKeys)
+				UriBuilder uriBuilder = new(BaseRestConfigApp.UrlBase)
 				{
+					Path = BaseRestConfigApp.Servicios[EndPoint].Path + pathSegments,
+				};
 
-					string? key = Uri.EscapeDataString(string.Concat("{", parameter, "}"));
-					string? value = HttpUtility.UrlEncode(pathParameters.Get(parameter));
-					if (key != null && value != null)
+				if (pathParameters != null)
+				{
+					foreach (var parameter in pathParameters.AllKeys)
 					{
-						uriBuilder.Path = uriBuilder.Path.Replace(key, value);
+
+						string? key = Uri.EscapeDataString(string.Concat("{", parameter, "}"));
+						string? value = HttpUtility.UrlEncode(pathParameters.Get(parameter));
+						if (key != null && value != null)
+						{
+							uriBuilder.Path = uriBuilder.Path.Replace(key, value);
+						}
 					}
 				}
-			}
 
-			return uriBuilder.ToString();
+				return uriBuilder.ToString();
+			}
+			catch (Exception ex)
+			{
+				throw new BussinnesException(EnumExceptions.ErrorBuildUrl, ex);
+			}
 		}
 
 		/// <summary>
@@ -224,11 +277,18 @@ namespace RutaSeguimientoApp.Services.RestServices
 		/// <returns></returns>
 		protected string BuildUrlApi()
 		{
-			UriBuilder uriBuilder = new(BaseRestConfigApp.UrlBase)
+			try
 			{
-				Path = BaseRestConfigApp.Servicios[EndPoint].Path,
-			};
-			return uriBuilder.ToString();
+				UriBuilder uriBuilder = new(BaseRestConfigApp.UrlBase)
+				{
+					Path = BaseRestConfigApp.Servicios[EndPoint].Path,
+				};
+				return uriBuilder.ToString();
+			}
+			catch (Exception ex)
+			{
+				throw new BussinnesException(EnumExceptions.ErrorBuildUrl, ex);
+			}
 		}
 		#endregion
 	}

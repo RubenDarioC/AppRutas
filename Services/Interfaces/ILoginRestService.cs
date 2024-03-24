@@ -4,6 +4,6 @@ namespace RutaSeguimientoApp.Services.Interfaces
 {
 	public interface ILoginRestService
 	{
-		Task<UserResponse> LoginUse(string user, string password);
+		Task<UserResponse> LoginUser(string user, string password);
 	}
 }

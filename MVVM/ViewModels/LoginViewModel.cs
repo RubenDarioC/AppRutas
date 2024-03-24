@@ -1,5 +1,7 @@
 ﻿using RutaSeguimientoApp.Common.Exceptions;
 using RutaSeguimientoApp.Common.Extensions;
+using RutaSeguimientoApp.Common.Helpers;
+using RutaSeguimientoApp.Models.ModelsEnum;
 using RutaSeguimientoApp.Models.ModelsPreference;
 using RutaSeguimientoApp.Models.ModelsRest;
 using RutaSeguimientoApp.MVVM.Models;
@@ -7,7 +9,7 @@ using RutaSeguimientoApp.Services.Interfaces;
 
 namespace RutaSeguimientoApp.MVVM.ViewModels
 {
-	public class LoginViewModel
+	public class LoginViewModel : ViewModelBase
 	{
 		readonly ILoginRestService _loginRestService = ActivatorUtilities.GetServiceOrCreateInstance<ILoginRestService>(App.ServiceProvider);
 		public LoginModel Login { get; set; }
@@ -21,15 +23,17 @@ namespace RutaSeguimientoApp.MVVM.ViewModels
 
 		public async void LoginUser()
 		{
+			BaseResponseRequest result = await CentralizadorDePeticiones(async () => await _loginRestService.LoginUser(Login.Email, Login.Password));
 
-			UserResponse result = await _loginRestService.LoginUse(Login.Email, Login.Password);
-
-			if (result is { Error: null, Token: not null, UserId: not null, Name: not null })
+			if (result.Success)
 			{
 				try
 				{
-					PreferencesExtensionApp.InsertPreferencesByModel((UserPreference)result);
-					await Shell.Current.GoToAsync($"//{nameof(MainPageView)}");
+					UserPreference userPreference = (UserPreference)(UserResponse)result.Data!;
+					userPreference.Remember = Login.Remember;
+					PreferencesExtensionApp.InsertPreferencesByModel(model: userPreference);
+					if(await ReadWriteStoragePermission.ValiatePermissionsApp())
+						await Shell.Current.GoToAsync($"//{nameof(MainPageView)}");
 				}
 				catch (BussinnesException ex)
 				{
@@ -37,17 +41,16 @@ namespace RutaSeguimientoApp.MVVM.ViewModels
 				}
 				catch (Exception ex)
 				{
-					await Application.Current!.MainPage!.DisplayAlert("Error", ex.Message, "Aceptar");
+					(string titulo, string descripcion) = EnumExceptions.UserRedirectionMainPageError.GetEnumDescriptionAndTittle();
+					await Application.Current!.MainPage!.DisplayAlert(titulo, descripcion, "Aceptar");
 				}
-			}
-			else if (result.Error != null) 
-			{
-				await Application.Current!.MainPage!.DisplayAlert("Error", result.Error.ToString(), "Aceptar");
 			}
 			else
 			{
-				await Application.Current!.MainPage!.DisplayAlert("tittle", "contraseña o usuario erroneos", "Aceptar");
+				await Application.Current!.MainPage!.DisplayAlert(result.MessageError?.Title, result.MessageError?.DetailsError, "Aceptar");
 			}
 		}
+
+	
 	}
 }

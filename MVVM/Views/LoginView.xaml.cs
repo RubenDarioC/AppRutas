@@ -13,6 +13,7 @@ public partial class LoginView : ContentPage
 
 	protected override bool OnBackButtonPressed()
 	{
+
 		return true;
 	}
 }

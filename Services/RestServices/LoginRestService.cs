@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using RutaSeguimientoApp.Common.Exceptions;
 using RutaSeguimientoApp.Models.ModelsConfig;
 using RutaSeguimientoApp.Models.ModelsEnum;
 using RutaSeguimientoApp.Models.ModelsRest;
@@ -21,35 +22,42 @@ namespace RutaSeguimientoApp.Services.RestServices
 
 		}
 
-		///<inheritdoc cref="ILoginRestService.LoginUse"/>
-		public async Task<UserResponse> LoginUse(string user, string password)
+		///<inheritdoc cref="ILoginRestService.LoginUser"/>
+		public async Task<UserResponse> LoginUser(string user, string password)
 		{
-			try
+
+			if (user == "admin" && password == "admin")
 			{
-				if (user == "admin" && password == "admin") 
+				UserResponse usermock = new UserResponse()
 				{
-					UserResponse usermock = new UserResponse() 
-					{
-						Email = "Email@.com",
-						FullName = "User FullName",
-						Telephone = "3124190000",
-						Name = "User",
-						Password = password,
-						UserId = "userId",
-						Token = "Token",
-					};
-					return usermock;
-				}
+					Success = true,
+					Email = "admin",
+					FullName = "User FullName",
+					Telephone = "3124190000",
+					Name = "User",
+					Password = password,
+					UserId = "userId",
+					Token = "Token",
+				};
+				return usermock;
+			}
 
-				string urlBuild = BuildUrlApi();
-				UserResponse userResponse = await PostTask<UserResponse>(urlBuild, new { User = user, Password = password });
-
+			string urlBuild = BuildUrlApi();
+			UserResponse userResponse = await PostTask<UserResponse>(urlBuild, new { User = user, Password = password });
+			if (userResponse.Success)
 				return userResponse;
-			}
-			catch
+
+			switch (userResponse.CodeResponse)
 			{
-				return new();
+				case (int)EnumExceptions.ErrorNoContent:
+					throw new BussinnesException(EnumExceptions.UserNotFound);
+
+				case (int)EnumExceptions.UserCredentialsError:
+					throw new BussinnesException(EnumExceptions.UserCredentialsError);
+
+				default: throw new BussinnesException(EnumExceptions.LoginError);
 			}
+
 		}
 
 	}
