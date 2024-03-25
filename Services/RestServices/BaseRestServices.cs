@@ -60,7 +60,7 @@ namespace RutaSeguimientoApp.Services.RestServices
 				bool validate = Uri.TryCreate(endPoint, UriKind.Absolute, out Uri? uri);
 				if (!validate || uri is null)
 				{
-					throw new BussinnesException(EnumExceptions.ErrorBuildRequest);
+					throw new BussinnesException(EnumExceptions.ErrorUrlNoPermited);
 				}
 
 				InserGlobalParameters(uri, headers: headers, CookieCollection);
@@ -101,6 +101,7 @@ namespace RutaSeguimientoApp.Services.RestServices
 					throw new BussinnesException(EnumExceptions.ErrorSendRequest, ex);
 				}
 			}
+			catch (BussinnesException) { throw; }
 			catch (Exception ex)
 			{
 				throw new BussinnesException(EnumExceptions.ErrorBuildRequest, ex);
@@ -198,13 +199,13 @@ namespace RutaSeguimientoApp.Services.RestServices
 		/// </summary>
 		/// <param name="queryParameters"></param>
 		/// <returns></returns>
-		protected string BuildUrlApi(NameValueCollection queryParameters)
+		protected string BuildUrlApi(NameValueCollection queryParameters, string pathQuery)
 		{
 			try
 			{
 				UriBuilder uriBuilder = new(BaseRestConfigApp.UrlBase)
 				{
-					Path = BaseRestConfigApp.Servicios[EndPoint].Path,
+					Path = BaseRestConfigApp.Servicios[EndPoint].Path + pathQuery,
 				};
 
 				if (queryParameters != null)
@@ -240,7 +241,7 @@ namespace RutaSeguimientoApp.Services.RestServices
 		/// <param name="pathSegments"></param>
 		/// <param name="pathParameters"></param>
 		/// <returns></returns>
-		protected string BuildUrlApi(string pathSegments, NameValueCollection pathParameters = null)
+		protected string BuildUrlApi(string pathSegments, NameValueCollection? pathParameters = null)
 		{
 			try
 			{

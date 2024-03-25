@@ -2,18 +2,24 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RutaSeguimientoApp.MVVM.Views.MapForRouteUserView"
+              xmlns:templ="clr-namespace:RutaSeguimientoApp.MVVM.Templates"
              xmlns:maps="http://schemas.microsoft.com/dotnet/2021/maui/maps"
              Title="MapForRouteUserView">
-    
-    <maps:Map x:Name="map">
-        <!--<maps:Map.ItemTemplate>
-            <DataTemplate x:DataType="maps:Pin">
-                <maps:Pin Location="{Binding Location}"
-                          Address="{Binding Address}"
-                          Label="{Binding Label}"
-                          MarkerClicked="Pin_MarkerClicked"/>
-            </DataTemplate>
-        </maps:Map.ItemTemplate>-->
-    </maps:Map>
+    <Grid>
+        <maps:Map x:Name="map">
+            <!--<maps:Map.ItemTemplate>
+                <DataTemplate x:DataType="maps:Pin">
+                    <maps:Pin Location="{Binding Location}"
+                              Address="{Binding Address}"
+                              Label="{Binding Label}"
+                              MarkerClicked="Pin_MarkerClicked"/>
+                </DataTemplate>
+            </maps:Map.ItemTemplate>-->
+        </maps:Map>
+
+        <AbsoluteLayout>
+            <templ:MenuTemplate  ControlTemplate="{StaticResource MenuUpTemplate}" />
+        </AbsoluteLayout>
+    </Grid>
     
 </ContentPage>

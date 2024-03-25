@@ -5,6 +5,8 @@
              xmlns:vm ="clr-namespace:RutaSeguimientoApp.MVVM.ViewModels"
              xmlns:local ="clr-namespace:RutaSeguimientoApp"
              xmlns:md="clr-namespace:RutaSeguimientoApp.Common.Utilities"
+             Shell.NavBarIsVisible="False"
+             Shell.TabBarIsVisible="False"
              x:Class="RutaSeguimientoApp.MVVM.Views.AppShell">
 
     <Shell.FlyoutIcon>

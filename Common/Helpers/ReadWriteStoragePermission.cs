@@ -6,6 +6,9 @@
 		{
 			try
 			{
+				if(DeviceInfo.Platform == DevicePlatform.WinUI)
+					return true;
+
 				PermissionStatus respondeLocationWhenInUse = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
 				PermissionStatus respondeLocationAlways = await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
 

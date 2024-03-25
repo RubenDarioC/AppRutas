@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:md="clr-namespace:RutaSeguimientoApp.Common.Utilities"
+             x:Class="RutaSeguimientoApp.MVVM.Templates.MenuTemplate">
+
+    <ContentView.Resources>
+
+        <ControlTemplate x:Key="MenuUpTemplate">
+
+            <FlexLayout
+                    Background="Transparent"
+                    Margin="0"
+                    Padding="0"
+                    Grid.Row="0"
+                    AlignItems="Start"
+                    JustifyContent="Start"
+                    Wrap="NoWrap">
+                <Button
+                    Command="{Binding OpenFlyoutMenuCommand}"
+                    BorderColor="Wheat"
+                    BackgroundColor="Transparent"
+                    AbsoluteLayout.LayoutBounds="0,1,40,40"
+                    AbsoluteLayout.LayoutFlags="PositionProportional"
+                    CornerRadius="5"
+                    HeightRequest="50"
+                    WidthRequest="50">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontFamily="MaterialOutlined"
+                            Glyph="{x:Static md:MaterialDesingIcons.Menu}"
+                            Size="40"
+                            Color= "Black"
+                     />
+                    </Button.ImageSource>
+                </Button>
+            </FlexLayout>
+        </ControlTemplate>
+
+    </ContentView.Resources>
+</ContentView>

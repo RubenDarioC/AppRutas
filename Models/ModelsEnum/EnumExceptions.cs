@@ -1,6 +1,4 @@
-﻿using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace RutaSeguimientoApp.Models.ModelsEnum
+﻿namespace RutaSeguimientoApp.Models.ModelsEnum
 {
 	public enum EnumExceptions
 	{
@@ -18,7 +16,7 @@ namespace RutaSeguimientoApp.Models.ModelsEnum
 		#endregion
 
 		#region Login 1 al 50
-		[EnumDescription("Error al validar las credenciales" , "Error Autenticacion")]
+		[EnumDescription("Error al validar las credenciales", "Error Autenticacion")]
 		LoginError = 1,
 
 		[EnumDescription("No se encontro el usuario", "Error Autenticacion")]
@@ -47,11 +45,14 @@ namespace RutaSeguimientoApp.Models.ModelsEnum
 
 		[EnumDescription("Error al construir la url para peticion")]
 		ErrorBuildUrl = 56,
+
+		[EnumDescription("Error al construir la url para peticion")]
+		ErrorUrlNoPermited = 57,
 		#endregion
 
 		#region Errores internos globales del sistema 1001 al 1100
 
-		[EnumDescription("Si persiste consulte a soporte codigo - ", "Error en la aplicacion ")]
+		[EnumDescription("Error interna en la aplicacion si el error persiste consulte a soporte", "Error en la aplicacion ")]
 		ExceptionNotControlled = 1001,
 
 		[EnumDescription("Error al tratar de crear la instancia en fluent validation")]

@@ -1,6 +1,7 @@
 ﻿using RutaSeguimientoApp.Common.Extensions;
 using RutaSeguimientoApp.Models.ModelsPreference;
 using RutaSeguimientoApp.Models.ModelsRest;
+using RutaSeguimientoApp.MVVM.ViewModels;
 using RutaSeguimientoApp.MVVM.Views;
 using RutaSeguimientoApp.Services.Interfaces;
 
@@ -15,21 +16,22 @@ namespace RutaSeguimientoApp
 		public MainPageView()
 		{
 			InitializeComponent();
+			BindingContext = new MainPageViewModel();
 		}
 
 		protected override async void OnAppearing()
 		{
 			UserPreference user = new UserPreference().GetPreferencesByModel();
-			if (string.IsNullOrEmpty(user.Password) || string.IsNullOrEmpty(user.Email)) 
+			if (string.IsNullOrEmpty(user.Password) || string.IsNullOrEmpty(user.Email))
 			{
 				await Shell.Current.GoToAsync($"{nameof(LoginView)}");
 			}
-			if( !user.Remember && Shell.Current.CurrentState.Location.ToString() == $"//{nameof(MainPageView)}")
+			if (!user.Remember && Shell.Current.CurrentState.Location.ToString() == $"//{nameof(MainPageView)}")
 			{
 				Preferences.Clear();
 				await Shell.Current.GoToAsync($"{nameof(LoginView)}");
 			}
-			else if(Shell.Current.CurrentState.Location.ToString() != $"//{nameof(MainPageView)}/{nameof(LoginView)}" && ValidateExpirationToken(user.Token))
+			else if (Shell.Current.CurrentState.Location.ToString() != $"//{nameof(MainPageView)}/{nameof(LoginView)}" && ValidateExpirationToken(user.Token))
 			{
 				try
 				{
@@ -38,7 +40,7 @@ namespace RutaSeguimientoApp
 					if (!userRember.Success)
 					{
 						await Shell.Current.GoToAsync($"{nameof(LoginView)}");
-					}					
+					}
 				}
 				catch (Exception ex)
 				{
@@ -47,10 +49,11 @@ namespace RutaSeguimientoApp
 			}
 		}
 
-		private bool ValidateExpirationToken(string token) 
+		private bool ValidateExpirationToken(string token)
 		{
 			return string.IsNullOrEmpty(token);
 		}
+
 		private void OnCounterClicked(object sender, EventArgs e)
 		{
 			count++;
@@ -61,6 +64,8 @@ namespace RutaSeguimientoApp
 				CounterBtn.Text = $"Clicked {count} times";
 
 			SemanticScreenReader.Announce(CounterBtn.Text);
+
+			Shell.Current.FlyoutIsPresented = true;
 		}
 	}
 

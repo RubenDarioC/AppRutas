@@ -7,10 +7,17 @@ namespace RutaSeguimientoApp.MVVM.ViewModels
 {
 	public class ViewModelBase
 	{
+		public Command OpenFlyoutMenuCommand { get; }
 		private BaseResponseRequest Response { get; set; }
 		public ViewModelBase()
 		{
 			Response = new BaseResponseRequest();
+			OpenFlyoutMenuCommand = new Command(OpenFlyout);
+		}
+
+		public void OpenFlyout()
+		{
+			Shell.Current.FlyoutIsPresented = true;
 		}
 
 		/// <summary>
@@ -58,7 +65,6 @@ namespace RutaSeguimientoApp.MVVM.ViewModels
 			}
 		}
 
-
 		/// <summary>
 		/// 
 		/// </summary>
@@ -93,7 +99,7 @@ namespace RutaSeguimientoApp.MVVM.ViewModels
 				if (string.IsNullOrEmpty(title))
 				{
 					(title, message) = EnumExceptions.ExceptionNotControlled.GetEnumDescriptionAndTittle();
-					message = $"{message}{codeError}";
+					message = $"{message} code - {codeError}";
 				}
 				Response.Success = false;
 				Response.MessageError = new()

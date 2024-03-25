@@ -82,10 +82,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="MVVM\Templates\" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <Compile Update="MVVM\Views\LoginView.xaml.cs">
 	    <DependentUpon>LoginView.xaml</DependentUpon>
 	  </Compile>
@@ -95,6 +91,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="MVVM\Templates\MenuTemplate.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="MVVM\Views\AppShell.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -102,9 +101,6 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="MVVM\Views\MapForRouteUserView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="MVVM\Views\NewPage1.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="MVVM\Views\UserAdminView.xaml">
