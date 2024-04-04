@@ -2,6 +2,9 @@
 
 namespace RutaSeguimientoApp.Models.ModelsConfig
 {
+	/// <summary>
+	/// clase que representa la configuracion de <see cref="HttpRestConfigApp"/> en el appsettings
+	/// </summary>
 	public class HttpRestConfigApp : BaseRestConfigApp
 	{
 		public new Dictionary<EnumServiciosHttp, ServiciosHttpConfig> Servicios { get; set; }

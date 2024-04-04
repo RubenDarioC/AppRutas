@@ -50,6 +50,12 @@
 		ErrorUrlNoPermited = 57,
 		#endregion
 
+		#region Errores Genericos 301 al 350
+
+		[EnumDescription("Error en las propiedades :", "Campos invalidos" )]
+		ErrorValidatePropertiesValidateFluent = 301,
+		#endregion
+
 		#region Errores internos globales del sistema 1001 al 1100
 
 		[EnumDescription("Error interna en la aplicacion si el error persiste consulte a soporte", "Error en la aplicacion ")]
@@ -60,7 +66,6 @@
 
 		[EnumDescription("Error al tratar de validar el modelo con fluent validation")]
 		ExceptionFluentValidationNotControlled = 1003,
-
 		#endregion
 	}
 }

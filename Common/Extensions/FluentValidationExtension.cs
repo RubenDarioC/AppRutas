@@ -9,12 +9,14 @@ namespace RutaSeguimientoApp.Common.Extensions
 	public static class FluentValidationExtension
 	{
 		/// <summary>
-		/// Validates and throws a specific business exception with the related validation errors.
+		/// Clase encargada de validar los errores de un modelo con datos, retornando un mensaje con los campos que no pasen las validaciones, se puede validar que algunas de las propiedades no pasaron validando
+		/// en la propiedad <see cref="BaseResponseRequest.Success"/> que sera marcada como false
+		/// y los detalles de las propiedades en <see cref="BaseResponseRequest.MessageError"/>
 		/// </summary>
 		/// <typeparam name="T">Es el modelo de datos a validar</typeparam>
 		/// <typeparam name="V">Es la clase que contiene las reglas de validacion</typeparam>
 		/// <param name="element"></param>
-		/// <returns></returns>
+		/// <returns><see cref="BaseResponseRequest"/></returns>
 		public static async Task<BaseResponseRequest> ValidateAndThrowsAsync<T, V>(this T element, params object[] args) where V : IValidator<T>, new() where T : class, new()
 		{
 			try
@@ -24,10 +26,16 @@ namespace RutaSeguimientoApp.Common.Extensions
 				if (!result.IsValid)
 				{
 					IEnumerable<string> listerror = result.Errors.Select(err => err.ErrorMessage).Distinct();
+					(string tittle, string description) = EnumExceptions.ErrorValidatePropertiesValidateFluent.GetEnumDescriptionAndTittle();
 					return new()
 					{
 						Success = false,
-						Data = listerror
+						MessageError = new()
+						{
+							CodeError = (int)EnumExceptions.ErrorValidatePropertiesValidateFluent,
+							Title = tittle,
+							DetailsError = description + string.Join("\n", listerror)
+						}
 					};
 				}
 				return new() { Success = true };
@@ -39,10 +47,16 @@ namespace RutaSeguimientoApp.Common.Extensions
 				if (!result.IsValid)
 				{
 					IEnumerable<string> listerror = result.Errors.Select(err => err.ErrorMessage).Distinct();
+					(string tittle, string description) = EnumExceptions.ErrorValidatePropertiesValidateFluent.GetEnumDescriptionAndTittle();
 					return new()
 					{
 						Success = false,
-						Data = listerror
+						MessageError = new()
+						{
+							CodeError = (int)EnumExceptions.ErrorValidatePropertiesValidateFluent,
+							Title = tittle,
+							DetailsError = description + string.Join("\n", listerror)
+						}
 					};
 				}
 				return new() { Success = true };

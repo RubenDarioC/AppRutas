@@ -2,20 +2,45 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RutaSeguimientoApp.MVVM.Views.MapForRouteUserView"
-              xmlns:templ="clr-namespace:RutaSeguimientoApp.MVVM.Templates"
+             xmlns:templ="clr-namespace:RutaSeguimientoApp.MVVM.Templates"
              xmlns:maps="http://schemas.microsoft.com/dotnet/2021/maui/maps"
+             xmlns:vm="clr-namespace:RutaSeguimientoApp.MVVM.ViewModels"
              Title="MapForRouteUserView">
-    <Grid>
-        <maps:Map x:Name="map">
-            <!--<maps:Map.ItemTemplate>
+
+
+    <Grid  RowDefinitions="1*, .9*">
+        <maps:Map x:Name="map" Grid.Row="0" Grid.RowSpan="2">
+            <maps:Map.ItemTemplate>
                 <DataTemplate x:DataType="maps:Pin">
                     <maps:Pin Location="{Binding Location}"
                               Address="{Binding Address}"
-                              Label="{Binding Label}"
-                              MarkerClicked="Pin_MarkerClicked"/>
+                              Label="{Binding Label}"/>
+                    <!--MarkerClicked="Pin_MarkerClicked"-->
                 </DataTemplate>
-            </maps:Map.ItemTemplate>-->
+            </maps:Map.ItemTemplate>
         </maps:Map>
+
+        <Grid Grid.Row="1" Background="Transparent">
+            <Border x:Name="BottomSheet"
+              IsVisible="{Binding MapRouteUserModel.IsFrameVisible}"
+              Stroke="White"
+              StrokeThickness="0"
+              Background="Transparent"
+              HorizontalOptions="FillAndExpand">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10,10,0,0" />
+                </Border.StrokeShape>
+                <Frame>
+                    <StackLayout VerticalOptions="StartAndExpand" HorizontalOptions="Fill">
+                        <!-- Contenido del bottom sheet -->
+                        <Button Command="{Binding MapRouteUserModel.ToggleFrameVisibilityCommand}" HeightRequest="8" CornerRadius="2" BackgroundColor="Grey" HorizontalOptions="Center" WidthRequest="70" Margin="25,10,0,10" />
+
+                        <Label HorizontalOptions="Start" FontSize="30">Titulo</Label>
+
+                    </StackLayout>
+                </Frame>
+            </Border>
+        </Grid>
 
         <AbsoluteLayout>
             <templ:MenuTemplate  ControlTemplate="{StaticResource MenuUpTemplate}" />

@@ -32,25 +32,29 @@ namespace RutaSeguimientoApp.MVVM.ViewModels
 					UserPreference userPreference = (UserPreference)(UserResponse)result.Data!;
 					userPreference.Remember = Login.Remember;
 					PreferencesExtensionApp.InsertPreferencesByModel(model: userPreference);
-					if(await ReadWriteStoragePermission.ValiatePermissionsApp())
-						await Shell.Current.GoToAsync($"//{nameof(MainPageView)}");
+					if (await AppRequestPermission.ValiatePermissionsApp())
+					{
+						await MostarToastMensaje("Acceso exitoso");
+						await Redireccionar($"//{nameof(MainPageView)}");
+					}
 				}
-				catch (BussinnesException ex)
+				catch (BussinnesException ex )
 				{
-					await Application.Current!.MainPage!.DisplayAlert(ex.Title, ex.ErrorDetails, "Aceptar");
+					IException exception = ex;
+					await DisplayAlertCentralizado(exception.Title, exception.ErrorDetails);
 				}
 				catch (Exception ex)
 				{
 					(string titulo, string descripcion) = EnumExceptions.UserRedirectionMainPageError.GetEnumDescriptionAndTittle();
-					await Application.Current!.MainPage!.DisplayAlert(titulo, descripcion, "Aceptar");
+					await DisplayAlertCentralizado(titulo, descripcion);
 				}
 			}
 			else
 			{
-				await Application.Current!.MainPage!.DisplayAlert(result.MessageError?.Title, result.MessageError?.DetailsError, "Aceptar");
+				await DisplayAlertCentralizado(result.MessageError?.Title, result.MessageError?.DetailsError);
 			}
 		}
 
-	
+
 	}
 }

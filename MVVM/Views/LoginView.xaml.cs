@@ -10,9 +10,12 @@ public partial class LoginView : ContentPage
 		BindingContext = new LoginViewModel();
 	}
 
+	/// <summary>
+	/// Evita el volver atars en la pagina del login
+	/// </summary>
+	/// <returns></returns>
 	protected override bool OnBackButtonPressed()
 	{
-
 		return true;
 	}
 }

@@ -54,10 +54,6 @@
 
     </Shell.FlyoutHeader>
 
-    <FlyoutItem>
-
-    </FlyoutItem>
-
     <!--#region -->
     <ShellContent Title="MainPage" Route="MainPageView" ContentTemplate="{DataTemplate local:MainPageView}">
         <ShellContent.Icon>

@@ -6,7 +6,8 @@ namespace RutaSeguimientoApp.Common.Extensions
 	public static class PreferencesExtensionApp
 	{
 		/// <summary>
-		/// Inserta las preferecias basado en un modelo de clase 
+		/// Inserta las preferecias basado en un clase y sus propiedades validar que los modelos de datos no se repitan para evitar sobre escritura de los valores
+		/// puede consultar en namespace <see langword="RutaSeguimientoApp.Models.ModelsPreference"/>
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="model"></param>
@@ -37,6 +38,7 @@ namespace RutaSeguimientoApp.Common.Extensions
 
 		/// <summary>
 		/// Obtiene los valores alamacenados en <see cref="Preferences"/> basado en el modelo de datos enviado
+		/// puede consultar en namespace <see langword="RutaSeguimientoApp.Models.ModelsPreference"/> para saber que datos se almacenan
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="model"></param>

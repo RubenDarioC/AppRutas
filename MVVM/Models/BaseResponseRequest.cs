@@ -1,5 +1,8 @@
 ﻿namespace RutaSeguimientoApp.MVVM.Models
 {
+	/// <summary>
+	/// clase base para la respuesta de las solicitudes
+	/// </summary>
 	public class BaseResponseRequest
 	{
 		public bool Success { get; set; }

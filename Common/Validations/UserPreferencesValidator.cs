@@ -3,6 +3,9 @@ using RutaSeguimientoApp.Models.ModelsPreference;
 
 namespace RutaSeguimientoApp.Common.Validations
 {
+	/// <summary>
+	/// clase que valida 
+	/// </summary>
 	public class UserPreferencesValidator : AbstractValidator<UserPreference>
 	{
 		public UserPreferencesValidator()

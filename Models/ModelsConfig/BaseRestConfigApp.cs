@@ -1,6 +1,9 @@
 ﻿
 namespace RutaSeguimientoApp.Models.ModelsConfig
 {
+	/// <summary>
+	/// clase base que representa la configuracion de <see cref="BaseRestConfigApp"/> en el appsettings
+	/// </summary>
 	public class BaseRestConfigApp
 	{
 		public string UrlBase { get; set; } = string.Empty;

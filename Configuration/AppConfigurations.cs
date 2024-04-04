@@ -7,7 +7,7 @@ namespace RutaSeguimientoApp.Configuration
 	public static class AppConfigurations
 	{
 		/// <summary>
-		/// 
+		/// Agrega los archivos de configuracion del ambiente
 		/// </summary>
 		/// <param name="builder"></param>
 		/// <returns></returns>
@@ -25,7 +25,8 @@ namespace RutaSeguimientoApp.Configuration
 
 
 		/// <summary>
-		/// El registro de estas rutas de debe dar con vistas o paginas que no esten dentro de la jerquia del shell
+		/// El registro de estas rutas se debe dar con vistas o paginas que no esten dentro de la jerquia de la clase <see cref="Shell"/>
+		/// como lo son los ShellContent o FlyoutItem
 		/// </summary>
 		public static void AddRoutesPages()
 		{

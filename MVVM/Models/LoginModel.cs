@@ -1,5 +1,8 @@
 ﻿namespace RutaSeguimientoApp.MVVM.Models
 {
+	/// <summary>
+	/// LoginModel
+	/// </summary>
 	public class LoginModel
 	{
 		public string Email { get; set; } = null!;

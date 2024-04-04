@@ -1,5 +1,8 @@
 ﻿namespace RutaSeguimientoApp.Models.ModelsRest
 {
+	/// <summary>
+	/// clase
+	/// </summary>
 	public class UserResponse : BaseResponseRest
 	{
 		public string? UserId { get; set; }

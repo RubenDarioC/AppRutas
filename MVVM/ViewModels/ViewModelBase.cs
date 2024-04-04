@@ -1,12 +1,18 @@
-﻿using RutaSeguimientoApp.Common.Extensions;
+﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
+using RutaSeguimientoApp.Common.Extensions;
 using RutaSeguimientoApp.Models.ModelsEnum;
 using RutaSeguimientoApp.MVVM.Models;
 using RutaSeguimientoApp.Services.Interfaces;
+using System.Diagnostics;
+
 
 namespace RutaSeguimientoApp.MVVM.ViewModels
 {
 	public class ViewModelBase
 	{
+		public bool IsEnabled { get; set; }
+		private bool isEnabled { get; set; }
 		public Command OpenFlyoutMenuCommand { get; }
 		private BaseResponseRequest Response { get; set; }
 		public ViewModelBase()
@@ -15,9 +21,19 @@ namespace RutaSeguimientoApp.MVVM.ViewModels
 			OpenFlyoutMenuCommand = new Command(OpenFlyout);
 		}
 
-		public void OpenFlyout()
+		/// <summary>
+		/// Encargado de desplegar el menu lateral 
+		/// </summary>
+		public async void OpenFlyout()
 		{
-			Shell.Current.FlyoutIsPresented = true;
+			IsEnabled = true;
+			await ControlarPeticiones(() =>
+			{
+				return Task.Run(() =>
+				{
+					Shell.Current.FlyoutIsPresented = true;
+				});
+			});
 		}
 
 		/// <summary>
@@ -25,7 +41,6 @@ namespace RutaSeguimientoApp.MVVM.ViewModels
 		/// </summary>
 		/// <typeparam name="TResult"></typeparam>
 		/// <param name="requestHandler"></param>
-		/// <param name="idTransaction"></param>
 		/// <returns></returns>
 		public BaseResponseRequest CentralizadorDePeticiones<TResult>(Func<TResult> requestHandler)
 		{
@@ -70,7 +85,6 @@ namespace RutaSeguimientoApp.MVVM.ViewModels
 		/// </summary>
 		/// <typeparam name="TResult"></typeparam>
 		/// <param name="requestHandler"></param>
-		/// <param name="idTransaction"></param>
 		/// <returns></returns>
 		public async Task<BaseResponseRequest> CentralizadorDePeticiones<TResult>(Func<Task<TResult>> requestHandler)
 		{
@@ -112,5 +126,64 @@ namespace RutaSeguimientoApp.MVVM.ViewModels
 				return Response;
 			}
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="mensaje"></param>
+		/// <returns></returns>
+		public async Task MostarToastMensaje(string mensaje)
+		{
+			IToast toast = Toast.Make(mensaje);
+			CancellationTokenSource cts = new(TimeSpan.FromSeconds(5));
+
+			await toast.Show(cts.Token);
+		}
+
+		public async Task DisplayAlertCentralizado(string? titulo, string? mensaje)
+		{
+			try
+			{
+				await Application.Current!.MainPage!.DisplayAlert(titulo, mensaje, "Aceptar");
+			}
+			catch (Exception ex) 
+			{
+				Debug.WriteLine(ex.Message);
+			}
+		}
+		public async Task<bool> DisplayAlertCentralizado(string? titulo, string? mensaje, bool aceptCancel)
+		{
+			try
+			{
+				if (aceptCancel)
+				{
+					bool result = await Application.Current!.MainPage!.DisplayAlert(titulo, mensaje, "Si", "No");
+					return result;
+				}
+				return false;
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine(ex.Message);
+				return false;
+			}
+		}
+
+		public async Task Redireccionar(string ruta) 
+		{
+			await Shell.Current.GoToAsync(ruta);
+		}
+
+		private async Task ControlarPeticiones(Func<Task> func) 
+		{
+			isEnabled = IsEnabled && !isEnabled;
+			if(isEnabled)
+			{
+				await func.Invoke();
+				IsEnabled = false;
+				isEnabled = false;
+			}
+		}
+
 	}
 }

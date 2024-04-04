@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Maui;
+using Microsoft.Extensions.Logging;
 using RutaSeguimientoApp.Configuration;
 
 namespace RutaSeguimientoApp
@@ -11,6 +12,7 @@ namespace RutaSeguimientoApp
 			builder
 				.UseMauiApp<App>()
 				.UseMauiMaps()
+				.UseMauiCommunityToolkit()
 				.ConfigureFonts(fonts =>
 				{
 					fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

@@ -2,6 +2,9 @@
 
 namespace RutaSeguimientoApp.Models.ModelsPreference
 {
+	/// <summary>
+	/// clase para insercion de la preferencias basicas del usuario
+	/// </summary>
 	public class UserPreference
 	{
 		public string? UserId { get; set; }

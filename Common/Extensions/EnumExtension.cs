@@ -3,8 +3,18 @@ using System.Reflection;
 
 namespace RutaSeguimientoApp.Common.Extensions
 {
+	/// <summary>
+	/// Extencion de la clase Enum
+	/// </summary>
 	public static class EnumExtension
 	{
+
+		/// <summary>
+		/// Metodo encargado de traer la descrupcion si la propiedad del enumerador contiene el atributo <see cref="EnumDescriptionAttribute"/> si esta no contiene el atributo devolvera vacio
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="e"></param>
+		/// <returns></returns>
 		public static string GetEnumDescription<T>(this T e) where T : Enum
 		{
 			try

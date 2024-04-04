@@ -10,15 +10,19 @@ namespace RutaSeguimientoApp.Configuration
 	/// </summary>
 	public static class DependencyInjection
 	{
+		/// <summary>
+		/// Agrega la dependencia de servicios 
+		/// </summary>
+		/// <param name="services"></param>
+		/// <returns></returns>
 		public static IServiceCollection AddDependencyServices(this IServiceCollection services)
 		{
 			services.AddTransient<ILoginRestService, LoginRestService>();
 			return services;
 		}
 
-
 		/// <summary>
-		/// metodo el cual agrega las dependecias del proyecto
+		/// Agrega la dependencia de viewmodels
 		/// </summary>
 		/// <param name="services"></param>
 		public static IServiceCollection AddDependencyViewsModels(this IServiceCollection services)
@@ -31,7 +35,7 @@ namespace RutaSeguimientoApp.Configuration
 		}
 
 		/// <summary>
-		/// 
+		/// Agrega la dependencia de views 
 		/// </summary>
 		/// <param name="services"></param>
 		/// <returns></returns>
