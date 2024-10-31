@@ -135,9 +135,7 @@ namespace RutaSeguimientoApp.MVVM.ViewModels
 		public async Task MostarToastMensaje(string mensaje)
 		{
 			IToast toast = Toast.Make(mensaje);
-			CancellationTokenSource cts = new(TimeSpan.FromSeconds(5));
-
-			await toast.Show(cts.Token);
+			await toast.Show(new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
 		}
 
 		public async Task DisplayAlertCentralizado(string? titulo, string? mensaje)

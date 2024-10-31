@@ -1,12 +1,12 @@
 ﻿namespace RutaSeguimientoApp.MVVM.ViewModels
 {
 	using Microsoft.Maui.Maps;
+	using RutaSeguimientoApp.Common.Helpers;
 	using RutaSeguimientoApp.Models;
-	using System.Diagnostics;
 	using Map = Microsoft.Maui.Controls.Maps.Map;
 	public class MapRouteUserViewModel : ViewModelBase
 	{
-		private readonly CancellationTokenSource _cancelTokenSource;
+		private CancellationTokenSource _cancelTokenSource { get; set; } = new CancellationTokenSource(TimeSpan.FromSeconds(3));
 		private bool _isCheckingLocation;
 
 		public MapRouteUserModel MapRouteUserModel { get; set; }
@@ -14,10 +14,14 @@
 
 		public MapRouteUserViewModel(Map map)
 		{
-			_cancelTokenSource = new CancellationTokenSource();
 			MapRouteUserModel = new();
 			IMap = map;
-			CargarRutaLocal().GetAwaiter().GetResult();
+			CargarInicializacion().GetAwaiter().GetResult();
+		}
+
+		public async Task CargarInicializacion()
+		{
+			await CargarRutaLocal();
 		}
 
 
@@ -25,8 +29,13 @@
 		{
 			try
 			{
-				Location? location = await Geolocation.Default.GetLastKnownLocationAsync();
-				if (location == null)
+				Location? location = null;
+				if (await AppRequestPermission.ValiatePermissionsApp())
+				{
+					location = await Geolocation.Default.GetLastKnownLocationAsync();
+				}
+
+				if (location == null && !_isCheckingLocation)
 				{
 					_isCheckingLocation = true;
 
@@ -45,8 +54,8 @@
 					}
 					catch (FeatureNotEnabledException)
 					{
-						bool resultado = await DisplayAlertCentralizado("GPS no esta habilitado"," Porfavor encienda el GPS.)", true);
-						if(resultado)
+						bool resultado = await DisplayAlertCentralizado("GPS no esta habilitado", " Porfavor encienda el GPS.)", true);
+						if (resultado)
 							AppInfo.Current.ShowSettingsUI();
 						await Redireccionar($"//{nameof(MainPageView)}");
 					}
@@ -58,6 +67,7 @@
 			}
 			catch (Exception ex)
 			{
+				await Redireccionar($"//{nameof(MainPageView)}");
 				await Shell.Current.DisplayAlert("Acceso a localizacion", "El acceso a la localizacion fue denegado, ingrese a las cnfiguraciones del telefno y asigne permisos para cargar las rutas", "ok");
 			}
 		}

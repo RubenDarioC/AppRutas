@@ -2,8 +2,12 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:templ="clr-namespace:RutaSeguimientoApp.MVVM.Templates"
-             x:Class="RutaSeguimientoApp.MVVM.Views.UserAdminView"
-             Title="UserAdminView">
+             xmlns:vm="clr-namespace:RutaSeguimientoApp.MVVM.ViewModels"
+             x:Class="RutaSeguimientoApp.MVVM.Views.UserAdminView">
+    <ContentPage.BindingContext>
+        <vm:UserAdminViewModel/>
+    </ContentPage.BindingContext>
+
     <Grid>
         <VerticalStackLayout>
             <Label 
@@ -16,4 +20,5 @@
             <templ:MenuTemplate  ControlTemplate="{StaticResource MenuUpTemplate}" />
         </AbsoluteLayout>
     </Grid>
+    
 </ContentPage>
